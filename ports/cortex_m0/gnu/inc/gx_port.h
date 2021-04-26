@@ -23,8 +23,8 @@
 /*                                                                        */
 /*  APPLICATION INTERFACE DEFINITION                       RELEASE        */
 /*                                                                        */
-/*    gx_api.h                                          Cortex-M0/GNU     */
-/*                                                           6.0          */
+/*    gx_port.h                                         Cortex-M0/GNU     */
+/*                                                          6.1.6         */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Kenneth Maxwell, Microsoft Corporation                              */
@@ -39,6 +39,10 @@
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Kenneth Maxwell          Initial Version 6.0           */
+/*  09-30-2020     Kenneth Maxwell          Modified comment(s),          */
+/*                                            resulting in version 6.1    */
+/*  04-02-2021     Kenneth Maxwell          Modified comment(s),          */
+/*                                            resulting in version 6.1.6  */
 /*                                                                        */
 /**************************************************************************/
 
@@ -94,21 +98,21 @@ typedef SHORT  GX_VALUE;
                                             extern  TX_THREAD           _tx_timer_thread; \
                                             extern  volatile ULONG      _tx_thread_system_state;
 
-#define GX_THREADS_ONLY_CALLER_CHECKING     if ((_tx_thread_system_state) || \
+#define GX_THREADS_ONLY_CALLER_CHECKING     if ((TX_THREAD_GET_SYSTEM_STATE()) || \
                                                 (_tx_thread_current_ptr == TX_NULL) || \
                                                 (_tx_thread_current_ptr == &_tx_timer_thread)) \
                                                 return(GX_CALLER_ERROR);
 
-#define GX_INIT_AND_THREADS_CALLER_CHECKING if (((_tx_thread_system_state) && (_tx_thread_system_state < ((ULONG) 0xF0F0F0F0))) || \
+#define GX_INIT_AND_THREADS_CALLER_CHECKING if (((TX_THREAD_GET_SYSTEM_STATE()) && ((TX_THREAD_GET_SYSTEM_STATE()) < ((ULONG) 0xF0F0F0F0))) || \
                                                 (_tx_thread_current_ptr == &_tx_timer_thread)) \
                                                 return(GX_CALLER_ERROR);
 
 
-#define GX_NOT_ISR_CALLER_CHECKING          if ((_tx_thread_system_state) && (_tx_thread_system_state < ((ULONG) 0xF0F0F0F0))) \
+#define GX_NOT_ISR_CALLER_CHECKING          if ((TX_THREAD_GET_SYSTEM_STATE()) && ((TX_THREAD_GET_SYSTEM_STATE()) < ((ULONG) 0xF0F0F0F0))) \
                                                 return(GX_CALLER_ERROR);
 
 #define GX_THREAD_WAIT_CALLER_CHECKING      if ((wait_option) && \
-                                               ((_tx_thread_current_ptr == NX_NULL) || (_tx_thread_system_state) || (_tx_thread_current_ptr == &_tx_timer_thread))) \
+                                               ((_tx_thread_current_ptr == NX_NULL) || (TX_THREAD_GET_SYSTEM_STATE()) || (_tx_thread_current_ptr == &_tx_timer_thread))) \
                                             return(GX_CALLER_ERROR);
 
 
@@ -119,18 +123,18 @@ typedef SHORT  GX_VALUE;
 #define GX_CALLER_CHECKING_EXTERNS          extern  TX_THREAD           *_tx_thread_current_ptr; \
                                             extern  volatile ULONG      _tx_thread_system_state;
 
-#define GX_THREADS_ONLY_CALLER_CHECKING     if ((_tx_thread_system_state) || \
+#define GX_THREADS_ONLY_CALLER_CHECKING     if ((TX_THREAD_GET_SYSTEM_STATE()) || \
                                                 (_tx_thread_current_ptr == TX_NULL)) \
                                                 return(GX_CALLER_ERROR);
 
-#define GX_INIT_AND_THREADS_CALLER_CHECKING if (((_tx_thread_system_state) && (_tx_thread_system_state < ((ULONG) 0xF0F0F0F0)))) \
+#define GX_INIT_AND_THREADS_CALLER_CHECKING if (((TX_THREAD_GET_SYSTEM_STATE()) && ((TX_THREAD_GET_SYSTEM_STATE()) < ((ULONG) 0xF0F0F0F0)))) \
                                                 return(GX_CALLER_ERROR);
 
-#define GX_NOT_ISR_CALLER_CHECKING          if ((_tx_thread_system_state) && (_tx_thread_system_state < ((ULONG) 0xF0F0F0F0))) \
+#define GX_NOT_ISR_CALLER_CHECKING          if ((TX_THREAD_GET_SYSTEM_STATE()) && ((TX_THREAD_GET_SYSTEM_STATE()) < ((ULONG) 0xF0F0F0F0))) \
                                                 return(GX_CALLER_ERROR);
 
 #define GX_THREAD_WAIT_CALLER_CHECKING      if ((wait_option) && \
-                                               ((_tx_thread_current_ptr == NX_NULL) || (_tx_thread_system_state))) \
+                                               ((_tx_thread_current_ptr == NX_NULL) || (TX_THREAD_GET_SYSTEM_STATE()))) \
                                             return(GX_CALLER_ERROR);
 
 #endif
@@ -140,7 +144,7 @@ typedef SHORT  GX_VALUE;
 
 #ifdef GX_SYSTEM_INIT
 CHAR _gx_version_id[] =
-    "Copyright (c) Microsoft Corporation. All rights reserved.  *  GUIX Cortex-M0/GNU Version G6.0 *";
+    "Copyright (c) Microsoft Corporation. All rights reserved.  *  GUIX Cortex-M0/GNU Version G6.x *";
 #else
 extern  CHAR _gx_version_id[];
 #endif

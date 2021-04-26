@@ -26,7 +26,7 @@
 /*  COMPONENT DEFINITION                                   RELEASE        */
 /*                                                                        */
 /*    gx_utility.h                                        PORTABLE C      */
-/*                                                           6.0          */
+/*                                                           6.1.3        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Kenneth Maxwell, Microsoft Corporation                              */
@@ -42,6 +42,12 @@
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Kenneth Maxwell          Initial Version 6.0           */
+/*  09-30-2020     Kenneth Maxwell          Modified comment(s),          */
+/*                                            added new prototype,        */
+/*                                            resulting in version 6.1    */
+/*  12-31-2020     Kenneth Maxwell          Modified comment(s), added    */
+/*                                            bidi test reordering APIs,  */
+/*                                            resulting in version 6.1.3  */
 /*                                                                        */
 /**************************************************************************/
 
@@ -49,6 +55,7 @@
 #define GX_UTILITY_H
 
 #if defined(GX_DYNAMIC_BIDI_TEXT_SUPPORT)
+/* Define bidi character types. */
 #define GX_BIDI_CHARACTER_TYPE_L     0x01 /* Left to Right */
 #define GX_BIDI_CHARACTER_TYPE_R     0x02 /* Right to Left */
 #define GX_BIDI_CHARACTER_TYPE_AL    0x03 /* Right to Left Arabic */
@@ -87,19 +94,68 @@
 #define GX_BIDI_DIRECTION_FORMAT_FSI 0x2068 /* First Strong Isolate */
 #define GX_BIDI_DIRECTION_FORMAT_PDI 0x2069 /* Pop Directional Isolate */
 
-typedef struct GX_BIDI_TEXT_INFO_STRUCT
-{
-    GX_STRING gx_bidi_text_info_text;
-    GX_FONT  *gx_bidi_text_info_font;
-    GX_VALUE  gx_bidi_text_info_display_width;
-} GX_BIDI_TEXT_INFO;
 
-typedef struct GX_BIDI_RESOLVED_TEXT_INFO_STRUCT
+#define GX_BIDI_OVERRIDE_STATUS_N    0x01 /* No override is currently active */
+#define GX_BIDI_OVERRIDE_STATUS_R    0x02 /* Characters are to be reset to R */
+#define GX_BIDI_OVERRIDE_STATUS_L    0x03 /* Characters are to be reset to L */
+
+#define GX_BIDI_MAX_EXPLICIT_DEPTH   125
+#define GX_BIDI_MAX_BRACKET_DEPTH    63
+
+/* Define explicit entry structure. */
+typedef struct GX_BIDI_EXPLICIT_ENTRY_STRUCT
 {
-    GX_STRING *gx_bidi_resolved_text_info_text;
-    UINT       gx_bidi_resolved_text_total_lines;
-    UINT       gx_bidi_resolved_text_processed_count;
-} GX_BIDI_RESOLVED_TEXT_INFO;
+    GX_UBYTE gx_bidi_explicit_level;
+    GX_BOOL  gx_bidi_explicit_override_status;
+    GX_BOOL  gx_bidi_explicit_isolate_status;
+} GX_BIDI_EXPLICIT_ENTRY;
+
+/* Define level run information structure. */
+typedef struct GX_BIDI_LEVEL_RUN_STRUCT
+{
+    INT                              gx_bidi_level_run_start_index;
+    INT                              gx_bidi_level_run_end_index;
+    GX_UBYTE                         gx_bidi_level_run_level;
+    struct GX_BIDI_LEVEL_RUN_STRUCT *gx_bidi_level_run_next;
+} GX_BIDI_LEVEL_RUN;
+
+/* Define isolate run sequence information structure. */
+typedef struct GX_BIDI_ISOLATE_RUN_STRUCT
+{
+    INT                               *gx_bidi_isolate_run_index_list;
+    INT                                gx_bidi_isolate_run_index_count;
+    GX_UBYTE                           gx_bidi_isolate_run_sos;
+    GX_UBYTE                           gx_bidi_isolate_run_eos;
+    struct GX_BIDI_ISOLATE_RUN_STRUCT *gx_bidi_isolate_run_next;
+} GX_BIDI_ISOLATE_RUN;
+
+/* Define unicode information structure. */
+typedef struct GX_BIDI_UNIT_STRUCT
+{
+    ULONG    gx_bidi_unit_code;
+    GX_UBYTE gx_bidi_unit_level;
+    GX_UBYTE gx_bidi_unit_type;
+    GX_UBYTE gx_bidi_unit_org_type;
+} GX_BIDI_UNIT;
+
+/* Define a truture to keep parameters for a bunch of functions. */
+typedef struct GX_BIDI_CONTEXT_STRUCT
+{
+    GX_BIDI_TEXT_INFO   *gx_bidi_context_input_info;
+    UINT                 gx_bidi_context_processced_size;
+    UINT                 gx_bidi_context_total_lines;
+    GX_BIDI_UNIT        *gx_bidi_context_unit_list;
+    INT                  gx_bidi_context_unit_count;
+    INT                 *gx_bidi_context_line_index_cache;
+    GX_BIDI_LEVEL_RUN   *gx_bidi_context_level_runs;
+    GX_BIDI_ISOLATE_RUN *gx_bidi_context_isolate_runs;
+    GX_UBYTE            *gx_bidi_context_buffer;
+    UINT                 gx_bidi_context_buffer_size;
+    UINT                 gx_bidi_context_buffer_index;
+    UINT                 gx_bidi_context_bracket_pair_size;
+    GX_UBYTE             gx_bidi_context_base_level;
+    ULONG                gx_bidi_context_reordered_utf8_size;
+} GX_BIDI_CONTEXT;
 
 /* Define bidirectional character infomation structure. */
 typedef struct GX_BIDI_CHARACTER_INFO_STRUCT
@@ -233,10 +289,14 @@ UINT         _gx_utility_rectangle_resize(GX_RECTANGLE *rectangle, GX_VALUE adju
 UINT         _gx_utility_rectangle_shift(GX_RECTANGLE *rectangle, GX_VALUE x_shift, GX_VALUE y_shift);
 
 #if defined(GX_DYNAMIC_BIDI_TEXT_SUPPORT)
-UINT    _gx_utility_bidi_bracket_pair_get(ULONG code, GX_BIDI_BRACKET_PAIR *bracket_pair);
-UINT    _gx_utility_bidi_character_type_get(ULONG code, GX_UBYTE *type);
-UINT    _gx_utility_bidi_mirroring_get(USHORT code, USHORT *mirror);
-UINT    _gx_utility_bidi_paragraph_reorder(GX_BIDI_TEXT_INFO *input_info, GX_BIDI_RESOLVED_TEXT_INFO *resolved_info);
+#if defined(GX_DYNAMIC_ARABIC_SHAPING_SUPPORT)
+UINT _gx_utility_bidi_arabic_shaping(GX_BIDI_CONTEXT *context);
+#endif
+UINT _gx_utility_bidi_bracket_pair_get(ULONG code, GX_BIDI_BRACKET_PAIR *bracket_pair);
+UINT _gx_utility_bidi_character_type_get(ULONG code, GX_UBYTE *type);
+UINT _gx_utility_bidi_mirroring_get(USHORT code, USHORT *mirror);
+UINT _gx_utility_bidi_paragraph_reorder(GX_BIDI_TEXT_INFO *input_info, GX_BIDI_RESOLVED_TEXT_INFO **resolved_info_head);
+UINT _gx_utility_bidi_resolved_text_info_delete(GX_BIDI_RESOLVED_TEXT_INFO **resolved_info_head);
 #endif
 
 #ifdef GX_THAI_GLYPH_SHAPING_SUPPORT
@@ -244,6 +304,7 @@ UINT    _gx_utility_thai_glyph_shaping(GX_CONST GX_STRING *string, GX_CHAR_CODE 
 #endif
 
 UINT    _gx_utility_string_length_check(GX_CONST GX_CHAR *string, UINT *length, UINT max_string_length);
+GX_BOOL _gx_utility_string_compare(GX_CONST GX_STRING *string_1, GX_CONST GX_STRING *string_2, UINT count);
 
 #if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT    _gx_utility_string_to_alphamap(GX_CONST GX_CHAR *text, GX_CONST GX_FONT *font, GX_PIXELMAP *textmap);
@@ -280,6 +341,9 @@ UINT    _gxe_utility_rectangle_shift(GX_RECTANGLE *rectangle, GX_VALUE x_shift, 
 UINT    _gxe_utility_string_to_alphamap(GX_CONST GX_CHAR *text, GX_CONST GX_FONT *font, GX_PIXELMAP *textmap);
 #endif
 UINT    _gxe_utility_string_to_alphamap_ext(GX_CONST GX_STRING *text, GX_CONST GX_FONT *font, GX_PIXELMAP *textmap);
-
+#if defined(GX_DYNAMIC_BIDI_TEXT_SUPPORT)
+UINT    _gxe_utility_bidi_paragraph_reorder(GX_BIDI_TEXT_INFO *input_info, GX_BIDI_RESOLVED_TEXT_INFO **resolved_info_head);
+UINT    _gxe_utility_bidi_resolved_text_info_delete(GX_BIDI_RESOLVED_TEXT_INFO **resolved_info_head);
+#endif
 #endif
 
