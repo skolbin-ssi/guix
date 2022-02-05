@@ -24,7 +24,7 @@
 /*  APPLICATION INTERFACE DEFINITION                       RELEASE        */
 /*                                                                        */
 /*    gx_port.h                                          Win32/Visual     */
-/*                                                           6.1.6        */
+/*                                                           6.1.10       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Kenneth Maxwell, Microsoft Corporation                              */
@@ -45,6 +45,17 @@
 /*  04-02-2021     Kenneth Maxwell          Modified comment(s),          */
 /*                                            added new defines,          */
 /*                                            resulting in version 6.1.6  */
+/*  06-02-2021     Kenneth Maxwell          Modified comment(s),          */
+/*                                            defined GX_DISABLE_THREADX_ */
+/*                                            TIMER_SOURCE,               */
+/*                                            resulting in version 6.1.7  */
+/*  08-02-2021     Kenneth Maxwell          Modified comment(s), removed  */
+/*                                            GX_SYSTEM_TIMER_TICKS and   */
+/*                                            GX_TICKS_SECOND definitions,*/
+/*                                            resulting in version 6.1.8  */
+/*  01-31-2022     Ting Zhu                 Modified comment(s), modified */
+/*                                            event thread create logic,  */
+/*                                            resulting in version 6.1.10 */
 /*                                                                        */
 /**************************************************************************/
 
@@ -68,6 +79,9 @@ typedef INT    GX_BOOL;
 
 typedef SHORT  GX_VALUE;
 
+/* Disable ThreadX timer.  */
+#define GX_DISABLE_THREADX_TIMER_SOURCE
+
 #define GX_VALUE_MAX                        0x7FFF
 
 /* For the win32 port, the entry point is WinMain, which is defined
@@ -78,11 +92,7 @@ typedef SHORT  GX_VALUE;
 #define GX_WIDGET_USER_DATA
 
 /* Define Win32 event thread create. */
-#define GX_WIN32_EVENT_THREAD_CREATE(driver_data, thread_name) tx_thread_create(&driver_data->win32_driver_thread, thread_name,                           \
-                                                                                gx_win32_driver_thread_entry, (ULONG)driver_data,                         \
-                                                                                (GX_UBYTE *)driver_data -> win32_driver_thread_stack, GX_WIN32_STACK_SIZE,\
-                                                                                GX_SYSTEM_THREAD_PRIORITY + 1, GX_SYSTEM_THREAD_PRIORITY + 1,             \
-                                                                                GX_SYSTEM_THREAD_TIMESLICE, TX_AUTO_START)
+#define GX_WIN32_EVENT_THREAD_CREATE(driver_data, thread_name) driver_data->win32_driver_thread_handle = CreateThread(NULL, GX_WIN32_STACK_SIZE, (LPTHREAD_START_ROUTINE)gx_win32_driver_thread_entry, driver_data, 0, 0);
 
 /* Define Win32 event thread exit. */
 #define GX_WIN32_EVENT_THREAD_EXIT(code)                       exit(code)
@@ -95,18 +105,11 @@ typedef SHORT  GX_VALUE;
 #define GX_THREAD_STACK_SIZE                4096
 #endif
 
-#ifndef GX_TICKS_SECOND
-#define GX_TICKS_SECOND                     50
-#endif
-
-
 #define GX_CONST                            const
 
 #define GX_INCLUDE_DEFAULT_COLORS
 
 #define GX_MAX_ACTIVE_TIMERS                32
-
-#define GX_SYSTEM_TIMER_TICKS               2           /*  20 ms */
 
 #define GX_MAX_VIEWS                        32
 
@@ -167,7 +170,7 @@ typedef SHORT  GX_VALUE;
 
 #ifdef GX_SYSTEM_INIT
 CHAR _gx_version_id[] =
-    "Copyright (c) Microsoft Corporation. All rights reserved.  *  GUIX Win32/Visual Version 6.1.6 *";
+    "Copyright (c) Microsoft Corporation. All rights reserved.  *  GUIX Win32/Visual Version 6.1.10 *";
 #else
 extern  CHAR _gx_version_id[];
 #endif

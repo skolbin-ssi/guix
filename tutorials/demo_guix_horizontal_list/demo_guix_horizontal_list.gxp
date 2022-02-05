@@ -3,8 +3,8 @@
 <project>
 <header>
 <project_version>55</project_version>
-<guix_version>60103</guix_version>
-<studio_version>6010500</studio_version>
+<guix_version>60108</guix_version>
+<studio_version>6010901</studio_version>
 <project_name>demo_guix_horizontal_list</project_name>
 <source_path>.\</source_path>
 <header_path>.\</header_path>
@@ -13,11 +13,12 @@
 <target_cpu>0</target_cpu>
 <target_tools>0</target_tools>
 <big_endian>FALSE</big_endian>
-<synergy_graph_accelerator>FALSE</synergy_graph_accelerator>
-<synergy_jpeg_decoder>0</synergy_jpeg_decoder>
-<synergy_png_decoder>0</synergy_png_decoder>
+<dave2d_graph_accelerator>FALSE</dave2d_graph_accelerator>
+<renesas_jpeg_decoder>0</renesas_jpeg_decoder>
+<renesas_png_decoder>0</renesas_png_decoder>
 <grid_enabled>FALSE</grid_enabled>
 <snap_enabled>FALSE</snap_enabled>
+<snap_to_widget_enabled>FALSE</snap_to_widget_enabled>
 <grid_spacing>10</grid_spacing>
 <snap_spacing>10</snap_spacing>
 <gen_binary>FALSE</gen_binary>
@@ -535,6 +536,7 @@
 <font_kerning>FALSE</font_kerning>
 <font_include_st_glyphs>FALSE</font_include_st_glyphs>
 <font_support_extended_unicode>FALSE</font_support_extended_unicode>
+<output_file_enabled>FALSE</output_file_enabled>
 <font_page_data>
 <enabled>TRUE</enabled>
 <first_char>32</first_char>
@@ -690,6 +692,7 @@
 <font_kerning>FALSE</font_kerning>
 <font_include_st_glyphs>FALSE</font_include_st_glyphs>
 <font_support_extended_unicode>FALSE</font_support_extended_unicode>
+<output_file_enabled>FALSE</output_file_enabled>
 <font_page_data>
 <enabled>TRUE</enabled>
 <first_char>32</first_char>
@@ -845,6 +848,7 @@
 <font_kerning>FALSE</font_kerning>
 <font_include_st_glyphs>FALSE</font_include_st_glyphs>
 <font_support_extended_unicode>FALSE</font_support_extended_unicode>
+<output_file_enabled>FALSE</output_file_enabled>
 <font_page_data>
 <enabled>TRUE</enabled>
 <first_char>32</first_char>
@@ -1000,6 +1004,7 @@
 <font_kerning>FALSE</font_kerning>
 <font_include_st_glyphs>TRUE</font_include_st_glyphs>
 <font_support_extended_unicode>FALSE</font_support_extended_unicode>
+<output_file_enabled>FALSE</output_file_enabled>
 <font_page_data>
 <enabled>TRUE</enabled>
 <first_char>32</first_char>
@@ -1176,6 +1181,7 @@
 <font_kerning>FALSE</font_kerning>
 <font_include_st_glyphs>FALSE</font_include_st_glyphs>
 <font_support_extended_unicode>FALSE</font_support_extended_unicode>
+<output_file_enabled>FALSE</output_file_enabled>
 <font_page_data>
 <enabled>TRUE</enabled>
 <first_char>32</first_char>
@@ -1470,6 +1476,33 @@
 <enabled>TRUE</enabled>
 <compress>FALSE</compress>
 </resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
 </resource>
 <vscroll_appearance>
 <scroll_width>20</scroll_width>
@@ -1498,7 +1531,7 @@
 <English>TRUE</English>
 <string_table>
 <sort_column>-1</sort_column>
-<num_strings>16</num_strings>
+<num_strings>17</num_strings>
 <num_languages>1</num_languages>
 <string_record>
 <id>STRING_1</id>
@@ -1574,6 +1607,11 @@
 <id>STRING_15</id>
 <font>0</font>
 <val>0</val>
+</string_record>
+<string_record>
+<id>STRING_16</id>
+<font>0</font>
+<val>set total cols</val>
 </string_record>
 </string_table>
 <widget_folder>
@@ -1898,6 +1936,58 @@
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
 <normal_map_id>MS_AZURE_LOGO_SMALL</normal_map_id>
+</widget>
+<widget>
+<type>text_button</type>
+<app_name>button_set_total_cols</app_name>
+<size>
+<left>331</left>
+<top>273</top>
+<right>491</right>
+<bottom>310</bottom>
+</size>
+<style>1073758209</style>
+<allocation>0</allocation>
+<accepts_focus>TRUE</accepts_focus>
+<normal_fill_color>BTN_LOWER</normal_fill_color>
+<selected_fill_color>BTN_UPPER</selected_fill_color>
+<disabled_fill_color>BTN_LOWER</disabled_fill_color>
+<id_name>ID_BUTTON_SET_TOTAL_COLS</id_name>
+<template>FALSE</template>
+<visible_at_startup>FALSE</visible_at_startup>
+<text_id>STRING_16</text_id>
+<font_id>BUTTON</font_id>
+<normal_text_color>BTN_TEXT</normal_text_color>
+<selected_text_color>BTN_TEXT</selected_text_color>
+<disabled_text_color>BTN_TEXT</disabled_text_color>
+</widget>
+<widget>
+<type>text_input</type>
+<app_name>text_input_set_total_cols</app_name>
+<size>
+<left>509</left>
+<top>274</top>
+<right>550</right>
+<bottom>310</bottom>
+</size>
+<style>1073758274</style>
+<allocation>0</allocation>
+<accepts_focus>TRUE</accepts_focus>
+<normal_fill_color>TEXT_INPUT_FILL</normal_fill_color>
+<selected_fill_color>SELECTED_FILL</selected_fill_color>
+<disabled_fill_color>TEXT_INPUT_FILL</disabled_fill_color>
+<id_name>ID_TEXT_INPUT_SET_TOTAL_COLS</id_name>
+<template>FALSE</template>
+<visible_at_startup>FALSE</visible_at_startup>
+<string_id>STRING_15</string_id>
+<font_id>TEXT_INPUT</font_id>
+<normal_text_color>TEXT</normal_text_color>
+<selected_text_color>SELECTED_TEXT</selected_text_color>
+<disabled_text_color>CANVAS</disabled_text_color>
+<readonly_fill_color>READONLY_FILL</readonly_fill_color>
+<readonly_text_color>READONLY_TEXT</readonly_text_color>
+<buffer_size>100</buffer_size>
+<dynamic_buffer>FALSE</dynamic_buffer>
 </widget>
 </widget>
 </widget_folder>
@@ -2334,6 +2424,7 @@
 <font_kerning>FALSE</font_kerning>
 <font_include_st_glyphs>FALSE</font_include_st_glyphs>
 <font_support_extended_unicode>FALSE</font_support_extended_unicode>
+<output_file_enabled>FALSE</output_file_enabled>
 <font_page_data>
 <enabled>TRUE</enabled>
 <first_char>32</first_char>
@@ -2489,6 +2580,7 @@
 <font_kerning>FALSE</font_kerning>
 <font_include_st_glyphs>FALSE</font_include_st_glyphs>
 <font_support_extended_unicode>FALSE</font_support_extended_unicode>
+<output_file_enabled>FALSE</output_file_enabled>
 <font_page_data>
 <enabled>TRUE</enabled>
 <first_char>32</first_char>
@@ -2644,6 +2736,7 @@
 <font_kerning>FALSE</font_kerning>
 <font_include_st_glyphs>FALSE</font_include_st_glyphs>
 <font_support_extended_unicode>FALSE</font_support_extended_unicode>
+<output_file_enabled>FALSE</output_file_enabled>
 <font_page_data>
 <enabled>TRUE</enabled>
 <first_char>32</first_char>
@@ -2799,6 +2892,7 @@
 <font_kerning>FALSE</font_kerning>
 <font_include_st_glyphs>FALSE</font_include_st_glyphs>
 <font_support_extended_unicode>FALSE</font_support_extended_unicode>
+<output_file_enabled>FALSE</output_file_enabled>
 <font_page_data>
 <enabled>TRUE</enabled>
 <first_char>32</first_char>
@@ -3553,6 +3647,7 @@
 <font_kerning>FALSE</font_kerning>
 <font_include_st_glyphs>FALSE</font_include_st_glyphs>
 <font_support_extended_unicode>FALSE</font_support_extended_unicode>
+<output_file_enabled>FALSE</output_file_enabled>
 <font_page_data>
 <enabled>TRUE</enabled>
 <first_char>32</first_char>
@@ -3708,6 +3803,7 @@
 <font_kerning>FALSE</font_kerning>
 <font_include_st_glyphs>FALSE</font_include_st_glyphs>
 <font_support_extended_unicode>FALSE</font_support_extended_unicode>
+<output_file_enabled>FALSE</output_file_enabled>
 <font_page_data>
 <enabled>TRUE</enabled>
 <first_char>32</first_char>
@@ -3863,6 +3959,7 @@
 <font_kerning>FALSE</font_kerning>
 <font_include_st_glyphs>FALSE</font_include_st_glyphs>
 <font_support_extended_unicode>FALSE</font_support_extended_unicode>
+<output_file_enabled>FALSE</output_file_enabled>
 <font_page_data>
 <enabled>TRUE</enabled>
 <first_char>32</first_char>
@@ -4018,6 +4115,7 @@
 <font_kerning>FALSE</font_kerning>
 <font_include_st_glyphs>FALSE</font_include_st_glyphs>
 <font_support_extended_unicode>FALSE</font_support_extended_unicode>
+<output_file_enabled>FALSE</output_file_enabled>
 <font_page_data>
 <enabled>TRUE</enabled>
 <first_char>32</first_char>
@@ -4772,6 +4870,7 @@
 <font_kerning>FALSE</font_kerning>
 <font_include_st_glyphs>FALSE</font_include_st_glyphs>
 <font_support_extended_unicode>FALSE</font_support_extended_unicode>
+<output_file_enabled>FALSE</output_file_enabled>
 <font_page_data>
 <enabled>TRUE</enabled>
 <first_char>32</first_char>
@@ -4927,6 +5026,7 @@
 <font_kerning>FALSE</font_kerning>
 <font_include_st_glyphs>FALSE</font_include_st_glyphs>
 <font_support_extended_unicode>FALSE</font_support_extended_unicode>
+<output_file_enabled>FALSE</output_file_enabled>
 <font_page_data>
 <enabled>TRUE</enabled>
 <first_char>32</first_char>
@@ -5082,6 +5182,7 @@
 <font_kerning>FALSE</font_kerning>
 <font_include_st_glyphs>FALSE</font_include_st_glyphs>
 <font_support_extended_unicode>FALSE</font_support_extended_unicode>
+<output_file_enabled>FALSE</output_file_enabled>
 <font_page_data>
 <enabled>TRUE</enabled>
 <first_char>32</first_char>
@@ -5237,6 +5338,7 @@
 <font_kerning>FALSE</font_kerning>
 <font_include_st_glyphs>FALSE</font_include_st_glyphs>
 <font_support_extended_unicode>FALSE</font_support_extended_unicode>
+<output_file_enabled>FALSE</output_file_enabled>
 <font_page_data>
 <enabled>TRUE</enabled>
 <first_char>32</first_char>

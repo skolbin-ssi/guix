@@ -5,8 +5,8 @@
 /*  specification file(s). For more information please refer to the Azure RTOS */
 /*  GUIX Studio User Guide, or visit our web site at azure.com/rtos            */
 /*                                                                             */
-/*  GUIX Studio Revision 6.0.1.14                                              */
-/*  Date (dd.mm.yyyy): 18.12.2020   Time (hh:mm): 16:59                        */
+/*  GUIX Studio Revision 6.1.9.2                                               */
+/*  Date (dd.mm.yyyy): 28.12.2021   Time (hh:mm): 13:06                        */
 /*******************************************************************************/
 
 
@@ -61,7 +61,7 @@ GX_STUDIO_DISPLAY_INFO demo_guix_home_automation_display_table[1] =
     &display_1_root_window,
     display_1_canvas_memory,                 /* canvas memory area             */
     1228800,                                 /* canvas memory size in bytes    */
-    0                                        /* rotation angle                 */
+    GX_SCREEN_ROTATION_NONE                  /* rotation angle                 */
     }
 };
 
@@ -5017,7 +5017,7 @@ GX_CONST GX_STUDIO_WIDGET main_screen_t_value_define =
     gx_studio_numeric_prompt_create,         /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {550, 14, 611, 64},                      /* widget size                    */
+    {549, 14, 612, 65},                      /* widget size                    */
     &main_screen_low_value_define,           /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(MAIN_SCREEN_CONTROL_BLOCK, main_screen_t_value), /* control block */
@@ -10372,9 +10372,15 @@ UINT gx_studio_display_configure(USHORT display, UINT (*driver)(GX_DISPLAY *),
             gx_display_pixelmap_table_set(display_info->display, theme_ptr->theme_pixelmap_table, theme_ptr->theme_pixelmap_table_size);
             gx_system_scroll_appearance_set(theme_ptr->theme_vertical_scroll_style, (GX_SCROLLBAR_APPEARANCE *) &theme_ptr->theme_vertical_scrollbar_appearance);
             gx_system_scroll_appearance_set(theme_ptr->theme_horizontal_scroll_style, (GX_SCROLLBAR_APPEARANCE *) &theme_ptr->theme_horizontal_scrollbar_appearance);
-            gx_display_language_table_set_ext(display_info->display, display_info->language_table, (GX_UBYTE) display_info->language_table_size, display_info->string_table_size);
-            gx_display_active_language_set(display_info->display, language);
         }
+    }
+
+/* Install the language table.                                                 */
+
+    if(display_info->language_table)
+    {
+        gx_display_language_table_set_ext(display_info->display, display_info->language_table, (GX_UBYTE) display_info->language_table_size, display_info->string_table_size);
+        gx_display_active_language_set(display_info->display, language);
     }
 
 /* Set screen rotation angle.                                                  */
