@@ -5,8 +5,8 @@
 /*  specification file(s). For more information please refer to the Azure RTOS */
 /*  GUIX Studio User Guide, or visit our web site at azure.com/rtos            */
 /*                                                                             */
-/*  GUIX Studio Revision 6.1.8.0                                               */
-/*  Date (dd.mm.yyyy): 26. 7.2021   Time (hh:mm): 15:32                        */
+/*  GUIX Studio Revision 6.3.0.0                                               */
+/*  Date (dd.mm.yyyy): 24.11.2023   Time (hh:mm): 16:43                        */
 /*******************************************************************************/
 
 
@@ -298,7 +298,7 @@ typedef struct
     GX_RESOURCE_ID      wallpaper_id;
     GX_RESOURCE_ID      selected_background;
     GX_CONST GX_RESOURCE_ID  *string_id_list;
-    UINT (*callback)(struct GX_NUMERIC_SCROLL_WHEEL_STRUCT*, INT, GX_STRING *);
+    UINT (*callback)(struct GX_STRING_SCROLL_WHEEL_STRUCT *, INT, GX_STRING *);
 } GX_STRING_SCROLL_WHEEL_PROPERTIES;
 
 typedef struct
@@ -315,7 +315,7 @@ typedef struct
     GX_RESOURCE_ID      disabled_text_color;
     GX_RESOURCE_ID      wallpaper_id;
     GX_RESOURCE_ID      selected_background;
-    UINT (*callback)(struct GX_NUMERIC_SCROLL_WHEEL_STRUCT*, INT, GX_STRING *);
+    UINT (*callback)(struct GX_NUMERIC_SCROLL_WHEEL_STRUCT *, INT, GX_STRING *);
     int                 start_val;
     int                 end_val;
 } GX_NUMERIC_SCROLL_WHEEL_PROPERTIES;

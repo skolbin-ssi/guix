@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -36,7 +35,7 @@
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
 /*    _gx_numeric_prompt_value_set                        PORTABLE C      */
-/*                                                           6.1          */
+/*                                                           6.2.0        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Kenneth Maxwell, Microsoft Corporation                              */
@@ -72,6 +71,10 @@
 /*                                            added logic to delete       */
 /*                                            dynamic bidi text,          */
 /*                                            resulting in version 6.1    */
+/*  10-31-2022     Kenneth Maxwell          Modified comment(s),          */
+/*                                            added line to insure        */
+/*                                            TEXT_COPY style is not set, */
+/*                                            resulting in version 6.2.0  */
 /*                                                                        */
 /**************************************************************************/
 UINT _gx_numeric_prompt_value_set(GX_NUMERIC_PROMPT *prompt, INT value)
@@ -81,14 +84,15 @@ UINT length;
 
     /* Format int value to string. */
     prompt -> gx_prompt_string.gx_string_ptr = prompt -> gx_numeric_prompt_buffer;
+    prompt -> gx_widget_style &= ~GX_STYLE_TEXT_COPY;
     prompt -> gx_numeric_prompt_format_function(prompt, value);
+
     status = _gx_utility_string_length_check(prompt->gx_prompt_string.gx_string_ptr, &length, GX_NUMERIC_PROMPT_BUFFER_SIZE - 1);
     if (status != GX_SUCCESS)
     {
         return status;
     }
     prompt -> gx_prompt_string.gx_string_length = length;
-
     prompt -> gx_prompt_text_id = 0;
 
 #if defined(GX_DYNAMIC_BIDI_TEXT_SUPPORT)

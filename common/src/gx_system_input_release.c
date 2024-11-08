@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -34,7 +33,7 @@
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
 /*    _gx_system_input_release                            PORTABLE C      */
-/*                                                           6.1          */
+/*                                                           6.2.1        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Kenneth Maxwell, Microsoft Corporation                              */
@@ -69,51 +68,58 @@
 /*  05-19-2020     Kenneth Maxwell          Initial Version 6.0           */
 /*  09-30-2020     Kenneth Maxwell          Modified comment(s),          */
 /*                                            resulting in version 6.1    */
+/*  07-29-2022     Kenneth Maxwell          Modified comment(s),          */
+/*                                            optimized logic and ensured */
+/*                                            released stack entries are  */
+/*                                            reset to NULL,              */
+/*                                            resulting in version 6.1.12 */
+/*  03-08-2023     Ting Zhu                 Modified comment(s),          */
+/*                                            improved logic,             */
+/*                                            resulting in version 6.2.1  */
 /*                                                                        */
 /**************************************************************************/
 
 UINT _gx_system_input_release(GX_WIDGET *owner)
 {
-GX_WIDGET **stacktop;
-GX_WIDGET **stackptr;
 UINT        status = GX_PTR_ERROR;
+GX_WIDGET **stack;
+INT         current;
+INT         top;
 
     GX_ENTER_CRITICAL
     if (_gx_system_capture_count > 0)
     {
         if (owner -> gx_widget_status & GX_STATUS_OWNS_INPUT)
         {
-            stacktop = _gx_system_input_capture_stack + _gx_system_capture_count - 1;
-            stackptr = _gx_system_input_capture_stack;
+            stack = _gx_system_input_capture_stack;
+            top = _gx_system_capture_count - 1;
+            current = 0;
 
-            while (stackptr <= stacktop)
+            while (current <= top)
             {
-                if (*stackptr == owner)
+                if (stack[current] == owner)
                 {
                     _gx_widget_status_remove(owner, GX_STATUS_OWNS_INPUT);
                     _gx_system_capture_count--;
-                    *stackptr = GX_NULL;
                     status = GX_SUCCESS;
                     break;
                 }
-                stackptr++;
+                current++;
             }
 
             if (status == GX_SUCCESS)
             {
                 /* collapse the stack if this entry was in the middle */
-                if (stackptr < stacktop)
+                while (current < top)
                 {
-                    while (stackptr < stacktop)
-                    {
-                        *stackptr = *(stackptr + 1);
-                        stackptr++;
-                    }
+                    stack[current] = stack[current + 1];
+                    current++;
                 }
-                if (_gx_system_capture_count > 0)
+                stack[current] = GX_NULL;
+
+                if (top > 0)
                 {
-                    stacktop--;
-                    _gx_system_input_owner = *stacktop;
+                    _gx_system_input_owner = stack[top - 1];
                 }
                 else
                 {

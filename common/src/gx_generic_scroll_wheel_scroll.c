@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -36,7 +35,7 @@
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
 /*    _gx_generic_scroll_wheel_scroll                     PORTABLE C      */
-/*                                                           6.1.7        */
+/*                                                           6.2.1        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Ting Zhu, Microsoft Corporation                                     */
@@ -77,9 +76,15 @@
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  06-02-2021        Ting Zhu              Initial Version 6.1.7         */
+/*  10-31-2022        Kenneth Maxwell       Modified comment(s),          */
+/*                                            changed return type,        */
+/*                                            resulting in version 6.2.0  */
+/*  03-08-2023        Ting Zhu              Modified comment(s),          */
+/*                                            changed return type,        */
+/*                                            resulting in version 6.2.1  */
 /*                                                                        */
 /**************************************************************************/
-VOID _gx_generic_scroll_wheel_scroll(GX_GENERIC_SCROLL_WHEEL *wheel, GX_VALUE shift)
+UINT _gx_generic_scroll_wheel_scroll(GX_GENERIC_SCROLL_WHEEL *wheel, GX_VALUE shift)
 {
 GX_WIDGET *child;
 INT        y_shift;
@@ -88,7 +93,7 @@ INT        max_shift;
 
     if (!shift)
     {
-        return;
+        return GX_SUCCESS;
     }
 
     if (!wheel -> gx_scroll_wheel_wrap_style_check((GX_SCROLL_WHEEL *)wheel))
@@ -160,5 +165,6 @@ INT        max_shift;
     {
         _gx_system_dirty_mark((GX_WIDGET *)wheel);
     }
+    return GX_SUCCESS;
 }
 

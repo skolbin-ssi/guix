@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -108,7 +107,6 @@ UINT                          win32_graphics_driver_setup_32argb_rotated(GX_DISP
 
 UINT                          win32_chromeart_graphics_driver_setup_565rgb(GX_DISPLAY *display);
 UINT                          win32_dave2d_graphics_driver_setup_8bit_palette(GX_DISPLAY *display);
-UINT                          win32_dave2d_graphics_driver_setup_8bit_palette_rotated(GX_DISPLAY* display);
 UINT                          win32_dave2d_graphics_driver_setup_24xrgb(GX_DISPLAY *display);
 UINT                          win32_dave2d_graphics_driver_setup_24xrgb_rotated(GX_DISPLAY *display);
 UINT                          win32_dave2d_graphics_driver_setup_565rgb(GX_DISPLAY *display);
@@ -118,8 +116,6 @@ VOID                          win32_32bpp_bitmap_header_create(GX_DISPLAY *displ
 VOID                          win32_display_driver_8bit_palette_set(GX_DISPLAY *display, GX_COLOR *palette, INT count);
 VOID                          win32_8bit_palette_bitmap_header_create(GX_DISPLAY *display);
 VOID                          win32_dave2d_simulation_24xrgb_bitmap_header_create(GX_DISPLAY *display);
-VOID                          win32_dave2d_simulation_display_driver_8bit_palette_set(GX_DISPLAY *display, GX_COLOR *palette, INT count);
-VOID                          win32_dave2d_simulation_8bit_palette_bitmap_header_create(GX_DISPLAY *display);
 void                          gx_win32_display_buffer_toggle(GX_CANVAS *canvas, GX_RECTANGLE *dirty);
 void                          gx_win32_driver_thread_entry(ULONG thread_input);
 void                          gx_win32_driver_thread_initialize(GX_WIN32_DISPLAY_DRIVER_DATA *instance);

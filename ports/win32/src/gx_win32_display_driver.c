@@ -1,13 +1,12 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
+/***************************************************************************
+ * Copyright (c) 2024 Microsoft Corporation 
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the MIT License which is available at
+ * https://opensource.org/licenses/MIT.
+ * 
+ * SPDX-License-Identifier: MIT
+ **************************************************************************/
 
 
 /**************************************************************************/
@@ -238,6 +237,10 @@ BOOL                         win32_graphics_data_initialized = FALSE;
 GX_WIN32_DISPLAY_DRIVER_DATA win32_instance_data[GX_MAX_WIN32_DISPLAYS];
 UINT                         win32_timer_id = 0;
 extern int                   gx_main(int, char **);
+
+#ifdef GX_THREADX_BINDING
+extern ULONG                 _tx_thread_system_state;
+#endif
 
 /**************************************************************************/
 /*                                                                        */
@@ -581,7 +584,7 @@ LONG  status;
 
     icon_path[0] = 0;
 
-    status = RegOpenKeyExA(HKEY_LOCAL_MACHINE, "Software\\Microsoft\\Azure_RTOS\\GUIX\\InstallDir", 0, READ_CONTROL | KEY_QUERY_VALUE, &key);
+    status = RegOpenKeyExA(HKEY_LOCAL_MACHINE, "Software\\Eclipse Foundation\\GUIX\\InstallDir", 0, READ_CONTROL | KEY_QUERY_VALUE, &key);
 
     if (key)
     {
@@ -1298,33 +1301,35 @@ VOID                         *memptr;
         return;
     }
 
-    /* Driver just becomes ready. So we need to refresh the whole display. */
-    if (driver_instance -> win32_driver_ready == 1)
-    {
-        gx_utility_rectangle_define(&canvas -> gx_canvas_dirty_area, 0, 0,
-                                    canvas -> gx_canvas_x_resolution - 1,
-                                    canvas -> gx_canvas_y_resolution - 1);
-        driver_instance -> win32_driver_ready = 2;
-    }
-
     gx_utility_rectangle_define(&Limit, 0, 0,
                                 canvas -> gx_canvas_x_resolution - 1,
                                 canvas -> gx_canvas_y_resolution - 1);
 
-    if (gx_utility_rectangle_overlap_detect(&Limit, &canvas -> gx_canvas_dirty_area, &Copy))
+    if (gx_utility_rectangle_overlap_detect(&Limit, dirty, &Copy))
     {
         memptr = _win32_canvas_memory_prepare(canvas, &Copy);
 
-        INT xsrc = Copy.gx_rectangle_left;
-        INT ysrc = Copy.gx_rectangle_top;
+        INT xsrc;
+        INT ysrc;
 
-        gx_utility_rectangle_shift(&Copy, canvas -> gx_canvas_display_offset_x, canvas -> gx_canvas_display_offset_y);
-
-        win_device = GetDC(driver_instance -> win32_driver_winhandle);
+        win_device = GetDC(driver_instance->win32_driver_winhandle);
         SetMapMode(win_device, MM_TEXT);
 
-        driver_instance -> win32_driver_bmpinfo.gx_bmp_header.biWidth = canvas -> gx_canvas_x_resolution;
-        driver_instance -> win32_driver_bmpinfo.gx_bmp_header.biHeight = canvas -> gx_canvas_y_resolution;
+#ifdef GX_ENABLE_CANVAS_PARTIAL_FRAME_BUFFER
+        xsrc = Copy.gx_rectangle_left - canvas->gx_canvas_memory_offset_x;
+        ysrc = Copy.gx_rectangle_top - canvas->gx_canvas_memory_offset_y;
+
+        driver_instance->win32_driver_bmpinfo.gx_bmp_header.biWidth = canvas->gx_canvas_memory_width;
+        driver_instance->win32_driver_bmpinfo.gx_bmp_header.biHeight = canvas->gx_canvas_memory_height;
+#else
+        xsrc = Copy.gx_rectangle_left;
+        ysrc = Copy.gx_rectangle_top;
+
+        driver_instance->win32_driver_bmpinfo.gx_bmp_header.biWidth = canvas->gx_canvas_x_resolution;
+        driver_instance->win32_driver_bmpinfo.gx_bmp_header.biHeight = canvas->gx_canvas_y_resolution;
+#endif
+
+        gx_utility_rectangle_shift(&Copy, canvas->gx_canvas_display_offset_x, canvas->gx_canvas_display_offset_y);
 
         Top = Copy.gx_rectangle_top;
         Left = Copy.gx_rectangle_left;
@@ -1792,7 +1797,7 @@ GX_WIN32_DISPLAY_DRIVER_DATA *instance = (GX_WIN32_DISPLAY_DRIVER_DATA *)thread_
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
 /*    gx_win32_driver_thread_initialize                  PORTABLE C       */
-/*                                                           6.1.10       */
+/*                                                           6.2.0        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Ting Zhu, Microsoft Corporation                                     */
@@ -1831,6 +1836,9 @@ GX_WIN32_DISPLAY_DRIVER_DATA *instance = (GX_WIN32_DISPLAY_DRIVER_DATA *)thread_
 /*  01-31-2022     Ting Zhu                 Modified comment(s), modified */
 /*                                            to use multi-media timer,   */
 /*                                            resulting in version 6.1.10 */
+/*  10-31-2022     Ting Zhu                 Modified comment(s), added    */
+/*                                            ThreadX system state check, */
+/*                                            resulting in version 6.2.0  */
 /*                                                                        */
 /**************************************************************************/
 void gx_win32_driver_thread_initialize(GX_WIN32_DISPLAY_DRIVER_DATA *instance)
@@ -1841,6 +1849,14 @@ void gx_win32_driver_thread_initialize(GX_WIN32_DISPLAY_DRIVER_DATA *instance)
 
     /* Mark the driver as ready. */
     instance->win32_driver_ready = 1;
+
+#ifdef GX_THREADX_BINDING
+    while (_tx_thread_system_state != 0)
+    {
+        /* ThreadX is not ready. */
+        Sleep(1);
+    }
+#endif
 
     /* Driver is ready, force a redraw. */
     gx_win32_message_to_guix(GX_EVENT_REDRAW);

@@ -13,6 +13,14 @@
       <Configuration>Debug_GX_DYNAMIC_BIDI_TEXT_SUPPORT</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug_GX_ENABLE_CANVAS_PARTIAL_FRAME_BUFFER|Win32">
+      <Configuration>Debug_GX_ENABLE_CANVAS_PARTIAL_FRAME_BUFFER</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug_GX_EXTENDED_UNICODE_SUPPORT|Win32">
+      <Configuration>Debug_GX_EXTENDED_UNICODE_SUPPORT</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug_GX_FONT_KERNING_SUPPORT|Win32">
       <Configuration>Debug_GX_FONT_KERNING_SUPPORT</Configuration>
       <Platform>Win32</Platform>
@@ -40,6 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\common\src\gxe_animation_delete.c" />
+    <ClCompile Include="..\..\..\..\common\src\gxe_binres_font_load.c" />
+    <ClCompile Include="..\..\..\..\common\src\gxe_binres_pixelmap_load.c" />
     <ClCompile Include="..\..\..\..\common\src\gxe_menu_event_process.c" />
     <ClCompile Include="..\..\..\..\common\src\gxe_prompt_event_process.c" />
     <ClCompile Include="..\..\..\..\common\src\gxe_string_scroll_wheel_event_process.c" />
@@ -53,6 +63,8 @@
     <ClCompile Include="..\..\..\..\common\src\gxe_generic_scroll_wheel_row_height_set.c" />
     <ClCompile Include="..\..\..\..\common\src\gxe_generic_scroll_wheel_total_rows_set.c" />
     <ClCompile Include="..\..\..\..\common\src\gx_animation_delete.c" />
+    <ClCompile Include="..\..\..\..\common\src\gx_binres_font_load.c" />
+    <ClCompile Include="..\..\..\..\common\src\gx_binres_pixelmap_load.c" />
     <ClCompile Include="..\..\..\..\common\src\gx_canvas_text_draw.c" />
     <ClCompile Include="..\..\..\..\common\src\gx_display_driver_16bpp_rotated_block_move.c" />
     <ClCompile Include="..\..\..\..\common\src\gx_display_driver_16bpp_rotated_canvas_copy.c" />
@@ -1229,6 +1241,7 @@
     <ClCompile Include="..\..\..\..\common\src\gx_utility_string_compare.c" />
     <ClCompile Include="..\..\..\..\common\src\gx_utility_string_length_check.c" />
     <ClCompile Include="..\..\..\..\common\src\gx_utility_string_to_alphamap.c" />
+    <ClCompile Include="..\..\..\..\common\src\gx_utility_thai_glyph_shaping.c" />
     <ClCompile Include="..\..\..\..\common\src\gx_utility_unicode_to_utf8.c" />
     <ClCompile Include="..\..\..\..\common\src\gx_utility_utf8_string_backward_character_length_get.c" />
     <ClCompile Include="..\..\..\..\common\src\gx_utility_utf8_string_character_get.c" />
@@ -1364,6 +1377,46 @@
     <ClCompile Include="..\..\src\gx_win32_display_driver_8bit_palette.c" />
     <ClCompile Include="..\..\src\gx_win32_display_driver_8bit_palette_rotated.c" />
     <ClCompile Include="..\..\src\gx_win32_display_driver_monochrome.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_16bpp_compressed_glyph_1bit_draw.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_16bpp_glyph_1bit_draw.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_16bpp_pixelmap_draw.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_16bpp_rotated_compressed_glyph_1bit_draw.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_16bpp_rotated_glyph_1bit_draw.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_16bpp_rotated_pixelmap_draw.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_24xrgb_pixelmap_blend.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_24xrgb_pixelmap_draw.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_24xrgb_rotated_pixelmap_blend.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_24xrgb_rotated_pixelmap_draw.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_24xrgb_rotated_setup.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_24xrgb_setup.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_32bpp_compressed_glyph_1bit_draw.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_32bpp_glyph_1bit_draw.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_32bpp_horizontal_pixelmap_line_draw.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_32bpp_rotated_compressed_glyph_1bit_draw.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_32bpp_rotated_glyph_1bit_draw.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_32bpp_rotated_horizontal_pixelmap_line_draw.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_565rgb_horizontal_pixelmap_line_draw.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_565rgb_rotated_horizontal_pixelmap_line_draw.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_565rgb_rotated_setup.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_565rgb_setup.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_8bit_palette_setup.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_8bpp_glyph_1bit_draw.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_8bpp_glyph_4bit_draw.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_compressed_glyph_4bit_draw.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_compressed_glyph_8bit_draw.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_glyph_4bit_draw.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_rotated_compressed_glyph_4bit_draw.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_rotated_compressed_glyph_8bit_draw.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_simulation_display_driver_rotated_glyph_4bit_draw.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_system_font_4bpp.c" />
+    <ClCompile Include="..\..\src\renesas\gx_dave2d_system_font_mono.c" />
+    <ClCompile Include="..\..\src\renesas\gx_synergy_system_font_4bpp.c" />
+    <ClCompile Include="..\..\src\renesas\gx_synergy_system_font_mono.c" />
+    <ClCompile Include="..\..\src\renesas\gx_win32_dave2d_display_driver_24xrgb.c" />
+    <ClCompile Include="..\..\src\renesas\gx_win32_dave2d_display_driver_24xrgb_rotated.c" />
+    <ClCompile Include="..\..\src\renesas\gx_win32_dave2d_display_driver_565rgb.c" />
+    <ClCompile Include="..\..\src\renesas\gx_win32_dave2d_display_driver_565rgb_rotated.c" />
+    <ClCompile Include="..\..\src\renesas\gx_win32_dave2d_display_driver_8bit_palette.c" />
     <ClCompile Include="..\..\src\st\gx_chromart_simulation_display_driver_565rgb_pixelmap_draw.c" />
     <ClCompile Include="..\..\src\st\gx_chromart_simulation_display_driver_565rgb_setup.c" />
     <ClCompile Include="..\..\src\st\gx_win32_chromart_display_driver_565rgb.c" />
@@ -1406,6 +1459,7 @@
     <ClInclude Include="..\..\..\..\common\inc\gx_widget.h" />
     <ClInclude Include="..\..\..\..\common\inc\gx_window.h" />
     <ClInclude Include="..\..\inc\gx_win32_display_driver.h" />
+    <ClInclude Include="..\..\src\renesas\gx_dave2d_simulation_display_driver.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <DefineConstants>
@@ -1417,6 +1471,18 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GX_ENABLE_CANVAS_PARTIAL_FRAME_BUFFER|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GX_EXTENDED_UNICODE_SUPPORT|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
@@ -1477,6 +1543,12 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GX_ENABLE_CANVAS_PARTIAL_FRAME_BUFFER|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GX_EXTENDED_UNICODE_SUPPORT|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GX_DISABLE_BRUSH_ALPHA_SUPPORT|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
@@ -1503,6 +1575,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
+    <TargetName>gx</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GX_ENABLE_CANVAS_PARTIAL_FRAME_BUFFER|Win32'">
+    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
+    <TargetName>gx</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GX_EXTENDED_UNICODE_SUPPORT|Win32'">
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
     <TargetName>gx</TargetName>
   </PropertyGroup>
@@ -1544,6 +1624,50 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>$(DefineConstants);WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;GX_ANIMATION_POOL_SIZE=16;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\tx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <BrowseInformation>false</BrowseInformation>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
+      <AdditionalIncludeDirectories>..\..\lib\vs_2019;..\..\inc;..\..\inc\synergy;..\..\..\..\common\inc</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Bscmake>
+      <OutputFile>$(OutDir)$(TargetName).bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GX_ENABLE_CANVAS_PARTIAL_FRAME_BUFFER|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>$(DefineConstants);WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;GX_ANIMATION_POOL_SIZE=16;GX_ENABLE_CANVAS_PARTIAL_FRAME_BUFFER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\tx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <BrowseInformation>false</BrowseInformation>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
+      <AdditionalIncludeDirectories>..\..\lib\vs_2019;..\..\inc;..\..\inc\synergy;..\..\..\..\common\inc</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Bscmake>
+      <OutputFile>$(OutDir)$(TargetName).bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_GX_EXTENDED_UNICODE_SUPPORT|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>$(DefineConstants);WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;GX_ANIMATION_POOL_SIZE=16;GX_EXTENDED_UNICODE_SUPPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\..\tx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BrowseInformation>false</BrowseInformation>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
